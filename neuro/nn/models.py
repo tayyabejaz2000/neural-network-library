@@ -1,6 +1,5 @@
 from abc import abstractclassmethod
 from typing import List
-from importlib_metadata import itertools
 
 import tensorflow as tf
 from neuro.nn.layer import Module

@@ -8,10 +8,10 @@ x_test = x_test / 255.0
 
 model = models.Sequential(
     layer.Flatten(),
-    layer.Dense(28*28, 512), activation.LeakyReLU(),
+    layer.Dense(28 * 28, 512), activation.ReLU(),
     layer.Dropout(0.25),
-    layer.Dense(512, 128), activation.LeakyReLU(),
-    layer.Dense(128, 16), activation.LeakyReLU(),
+    layer.Dense(512, 128), activation.ReLU(),
+    layer.Dense(128, 16), activation.ReLU(),
     layer.Dense(16, 10), activation.Softmax(),
 )
 
@@ -30,8 +30,11 @@ for i in range(epochs):
     # Back Propagation + Optimizing
     optim(model, loss)
 
+
 model.trainable = False
+
 predictions = model(x_test)
 predictions = tf.argmax(predictions, axis=1).numpy()
+
 acc = sum(predictions == y_test) / len(y_test)
 print(f"Test Accuracy: {acc * 100}%")

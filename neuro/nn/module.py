@@ -2,7 +2,6 @@ from abc import abstractclassmethod
 from typing import List
 
 import tensorflow as tf
-from neuro.nn.activation import *
 
 
 class Module:
