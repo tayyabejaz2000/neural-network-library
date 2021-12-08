@@ -6,16 +6,22 @@ from neuro.nn import activation, layer, losses, models, optimizer
 x_train = x_train / 255.0
 x_test = x_test / 255.0
 
+y_train = tf.one_hot(y_train, 10)
+
 model = models.Sequential(
     layer.Flatten(),
-    layer.Dense(28 * 28, 512), activation.ReLU(),
+    layer.Dense(28 * 28, 512),
+    activation.ReLU(),
     layer.Dropout(0.25),
-    layer.Dense(512, 128), activation.ReLU(),
-    layer.Dense(128, 16), activation.ReLU(),
-    layer.Dense(16, 10), activation.Softmax(),
+    layer.Dense(512, 128),
+    activation.ReLU(),
+    layer.Dense(128, 16),
+    activation.ReLU(),
+    layer.Dense(16, 10),
+    activation.StableSoftmax(),
 )
 
-loss = losses.SparseCategoricalCrossentropy()
+loss = losses.CategoricalCrossentropy()
 optim = optimizer.Adam()
 
 epochs = 100
