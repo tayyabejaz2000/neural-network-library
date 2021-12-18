@@ -6,12 +6,13 @@ from neuro.nn.module import Module
 
 class Sigmoid(Module):
     def forward(self, x: tf.Variable) -> tf.Variable:
-        forward_pass = 1 / (1 + tf.exp(-x))
+        forward_pass = 1.0 / (1.0 + tf.exp(-x))
         self._cachedTensor = forward_pass
         return forward_pass
 
     def backprop(self, grad: tf.Variable) -> List[tf.Variable]:
-        return [(self._cachedTensor * (1 - self._cachedTensor)) * grad]
+        gradient = [(self._cachedTensor * (1.0 - self._cachedTensor)) * grad]
+        return gradient
 
 
 class Softmax(Module):
@@ -62,7 +63,7 @@ class Tanh(Module):
 
 class ReLU(Module):
     def forward(self, x: tf.Variable) -> tf.Variable:
-        forward_pass = tf.maximum(0, x)
+        forward_pass = tf.maximum(0.0, x)
         self._cachedTensor = x
         return forward_pass
 
@@ -81,5 +82,5 @@ class LeakyReLU(Module):
         return forward_pass
 
     def backprop(self, grad: tf.Variable) -> List[tf.Variable]:
-        localGradient = tf.where(self._cachedTensor < 0, self.alpha, 1)
+        localGradient = tf.where(self._cachedTensor < 0.0, self.alpha, 1.0)
         return [localGradient * grad]

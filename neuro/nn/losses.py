@@ -7,11 +7,11 @@ class Loss:
     _localGradients: tf.Variable
 
     @abstractclassmethod
-    def __call__(self, y_pred: tf.Variable, y_true: tf.Variable) -> tf.Variable:
+    def __call__(cls, y_pred: tf.Variable, y_true: tf.Variable) -> tf.Variable:
         pass
 
     @abstractclassmethod
-    def gradient(self) -> tf.Variable:
+    def gradient(cls) -> tf.Variable:
         pass
 
 
@@ -36,7 +36,8 @@ class HingeLoss(Loss):
     def hinge_loss(self, y_pred: tf.Variable, y_true: tf.Variable) -> tf.Variable:
         mul = y_true * y_pred
         loss = tf.reduce_sum(tf.maximum(-mul, 0))
-        self._localGradients = tf.where(mul < 1, -y_true / float(y_pred.shape[0]), 0)
+        self._localGradients = tf.where(
+            mul < 1, -y_true / float(y_pred.shape[0]), 0)
         return loss
 
     def gradient(self) -> tf.Variable:

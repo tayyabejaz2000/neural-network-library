@@ -48,7 +48,8 @@ class AdaGrad(Optimizer):
         self, gradients: List[List[tf.Variable]], weights: List[List[tf.Variable]]
     ) -> List[List[tf.Variable]]:
         if self.__delta is None:
-            self.__delta = [0.0] * (len(weights) * sum([len(i) for i in weights]))
+            self.__delta = [0.0] * \
+                (len(weights) * sum([len(i) for i in weights]))
 
         updatedWeights = weights
         a = 0
@@ -78,7 +79,8 @@ class RMSProp(Optimizer):
         if self.__delta is None or len(self.__delta) != len(weights) * sum(
             [len(i) for i in weights]
         ):
-            self.__delta = [0.0] * len(weights) * sum([len(i) for i in weights])
+            self.__delta = [0.0] * len(weights) * \
+                sum([len(i) for i in weights])
 
         updatedWeights = weights
         a = 0
@@ -135,8 +137,10 @@ class Adam(Optimizer):
                 self.__v[a] = self.beta_rates[1] * self.__v[a] + (
                     1 - self.beta_rates[1]
                 ) * tf.square(gradient)
-                m_corrected = self.__m[a] / (tf.pow(1 - self.beta_rates[0], self.__t))
-                v_corrected = self.__v[a] / (tf.pow(1 - self.beta_rates[1], self.__t))
+                m_corrected = self.__m[a] / \
+                    (tf.pow(1 - self.beta_rates[0], self.__t))
+                v_corrected = self.__v[a] / \
+                    (tf.pow(1 - self.beta_rates[1], self.__t))
                 a += 1
 
                 updatedWeights[i][j] = weight - self.learning_rate * m_corrected / (
