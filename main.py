@@ -5,27 +5,14 @@ from neuro.nn import activation, layer, losses, models, optimizer
 
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data()
 
-x_train = x_train / 255.0
-x_test = x_test / 255.0
+x_train = tf.transpose(x_train / 255.0, perm=[0, 3, 1, 2])
+x_test = tf.transpose(x_test / 255.0, perm=[0, 3, 1, 2])
 
 y_train = tf.one_hot(y_train[..., 0], 10)
 y_test = y_test[..., 0]
 
-# model = models.Sequential(
-#     layer.Flatten(),
-#     layer.Dense(32 * 32 * 3, 1024),
-#     activation.ReLU(),
-#     layer.Dropout(0.15),
-#     layer.Dense(1024, 512),
-#     activation.ReLU(),
-#     layer.Dense(512, 64),
-#     activation.ReLU(),
-#     layer.Dense(64, 10),
-#     activation.StableSoftmax(),
-# )
-
 model = models.Sequential(
-    layer.Conv2D(1, 64, (5, 5), padding=2),
+    layer.Conv2D(3, 64, (5, 5), padding=2),
     activation.ReLU(),
     layer.Conv2D(64, 32, (3, 3), padding=1, stride=2),
     activation.ReLU(),
@@ -38,11 +25,11 @@ model = models.Sequential(
 )
 
 loss = losses.CategoricalCrossentropy()
-optim = optimizer.Adam(lr=1e-4)
+optim = optimizer.Adam()
 
 print("Starting Training")
 epochs = 1
-batch_size = 64
+batch_size = 128
 for i in range(epochs):
     start, end = 0, batch_size
     batch_num = 0
@@ -63,9 +50,9 @@ for i in range(epochs):
 
 
 model.trainable = False
-predictions = model(x_test)
+predictions = model(x_test[:512])
 
 predictions = tf.argmax(predictions, axis=-1)
 
-acc = sum(predictions.numpy() == y_test) / len(y_test)
+acc = sum(predictions.numpy() == y_test[:512]) / len(y_test[:512])
 print(f"Test Accuracy: {acc * 100}%")
